@@ -18,13 +18,25 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.forkedbranch.jug.apiexposure.models.User;
 import eu.forkedbranch.jug.apiexposure.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
+@Api
 @Path("/users")
 public class UsersController {
 	private UserService service = UserService.getInstance();
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(
+			value = "Get all users",
+			notes = "Some more elaborate text on getting all users",
+			response = User.class,
+			responseContainer = "List"
+			)
 	public Response getUsers()
 	{
 		return Response.ok().entity(service.getUsers()).build();
@@ -33,6 +45,17 @@ public class UsersController {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(
+			value = "Get user by ID",
+			notes = "Some more elaborate text on getting a user by ID",
+			response = User.class
+			)
+	@ApiResponses(
+		@ApiResponse(
+				code = 404,
+				message = "User resource not found"
+				)
+		)
 	public Response getUser(
 			@PathParam("id") String id) 
 	{
@@ -46,8 +69,20 @@ public class UsersController {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@ApiOperation(
+			value = "Add user",
+			notes = "Some more elaborate text on adding a user"
+			)
+	@ApiResponses(
+			@ApiResponse(
+					code = 201, 
+					message = "User successfuly created"
+					)
+			)
 	public Response addUser(
+			@ApiParam(required = true, value="First name of a user")
 			@FormParam("firstName") String firstName,
+			@ApiParam(required = true, value="Last name of a user")
 			@FormParam("lastName") String lastName,
 			@Context UriInfo info)
 	{
@@ -63,6 +98,17 @@ public class UsersController {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(
+			value = "Delete user by ID",
+			notes = "Some more elaborate text on deleting a user by ID",
+			response = User.class
+			)
+	@ApiResponses(
+		@ApiResponse(
+				code = 404,
+				message = "User resource not found"
+				)
+		)
 	public Response deleteUser(
 			@PathParam("id") String id) 
 	{

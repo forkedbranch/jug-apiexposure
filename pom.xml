@@ -13,7 +13,22 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencies>		
+	<dependencies>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jaxrs</artifactId>
+			<version>1.5.16</version>
+			<!-- This is needed as 1.x versions of Swagger tooling have explicit dependency 
+				on JAX-RS (JSR-311) whereas RESTEasy implements JAX-RS 2 (JSR-399). This 
+				may lead to undesired class shadowing. We've all been in the JAR Hell. -->
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
